@@ -5,14 +5,25 @@ define([
 ], function(Backbone, _, MainView) {
     return Backbone.Router.extend({
         routes: {
-            '':'index'
+            '':'index',
+            ':server':'server'
         },
 
         index: function() {
-            window.ism = new MainView();
 
-            window.ism.MenuCollection.fetch();
+            if (!window.ism) {
+                window.ism = new MainView();
 
+                window.ism.MenuCollection.fetch();
+                window.ism.MiniCollection.fetch(); 
+            }
+
+        },
+
+        server: function(s) {
+            console.log('server');
+            console.log(s);
+            
         }
     });
 });

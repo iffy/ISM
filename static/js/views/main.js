@@ -12,6 +12,7 @@ define([
 
         initialize: function() {
 
+
             // CREATE THE MENU VIEW
             this.MenuCollection = new MenuCollection();
             this.MenuView = new MenuView({
@@ -23,8 +24,6 @@ define([
             this.MiniCollectionView = new MiniCollectionView({
                 'collection':this.MiniCollection
             });
-
-            this.MiniCollection.fetch();
 
             // LATENCY
             this.LatencyView = new LatencyView();

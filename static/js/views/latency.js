@@ -4,7 +4,7 @@ define([
     'highcharts',
     'datepicker',
     'text!templates/latency.html',
-], function(Backbone, _, Highchart, Datepicker, LatencyTemplate) {
+], function(Backbone, _, Highcharts, Datepicker, LatencyTemplate) {
     
     return Backbone.View.extend({
         
