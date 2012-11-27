@@ -52,7 +52,6 @@ class MainResource(Resource):
 class MenuItems(Resource):
     
     def render_GET(self, request):
-        print 'its here'
         return json.dumps([
             {
                 'name':'Dashboard',
@@ -82,29 +81,17 @@ class MiniWrap(Resource):
     def render_GET(self, request):
         web0 = {
             'id':'web0',
-            'title':'Web0',
-            'ram':randint(0, 32000),
-            'ram_max':'16000',
-            'connections':randint(0, 2000),
-            'cpu':randint(0, 100)
+            'maxram':200
         }
 
         web1 = {
             'id':'web1',
-            'title':'Web1',
-            'ram':randint(0, 32000),
-            'ram_max':'32000',
-            'connections':randint(0, 2000),
-            'cpu':randint(0, 100)
+            'maxram':200
         }
 
         web2 = {
             'id':'web2',
-            'title':'Web2',
-            'ram':randint(0, 32000),
-            'ram_max':'32000',
-            'connections':randint(0, 2000),
-            'cpu':randint(0, 100)
+            'maxram':200
         }
 
         return json.dumps([

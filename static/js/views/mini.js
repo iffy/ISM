@@ -1,9 +1,8 @@
 define([
     'backbone',
     'underscore',
-    'sockjs',
     'text!templates/mini.html',
-], function(Backbone, _, SockJS, MiniTemplate) {
+], function(Backbone, _, MiniTemplate) {
     
     return Backbone.View.extend({
         
@@ -17,54 +16,47 @@ define([
             _.bindAll(this, 'refreshGraphs');
 
             this.model.on('change', this.refreshGraphs, this);
-            var sock = new SockJS('http://enthusia.sm:8099');
-            sock.onopen = function() {
-                console.log('open');
-            }
-
-            sock.onmessage = this.refreshGraphs;
-
 
         },
 
-
         render: function() {
             $(this.el).html(this.template(this.model.toJSON()));
+            console.log('rendering view');
             return this;
         },
 
         drawGraphs: function() {
             // This should only be called once after render
             this.g1 = new JustGage({
-                id:this.model.get('title') + '_ram',
-                value:this.model.get('ram'),
+                id: this.model.get('id') + '_ram',
+                value:0,
                 min:0,
-                max:this.model.get('ram_max'),
+                max:100,
                 title: "Ram",
                 humanFriendly: true
             });
             
             this.g2 = new JustGage({
-                id:this.model.get('title') + '_cpu',
-                value:this.model.get('cpu'),
+                id:this.model.get('id') + '_cpu',
+                value:this.model.get('cpuload'),
                 min:0,
                 max:100,
                 title: "CPU Load"
             });
             
             this.g3 = new JustGage({
-                id:this.model.get('title') + '_connections',
-                value:this.model.get('connections'),
+                id:this.model.get('id') + '_connections',
+                value:this.model.get('dbconn'),
                 min:0,
-                max:2000,
+                max:200,
                 title: "Connections"
-            });
+            }); 
         },
 
         refreshGraphs: function(d) {
-            this.g1.refresh(this.model.get('ram'));
-            this.g2.refresh(this.model.get('cpu'));
-            this.g3.refresh(this.model.get('connections'));
+            this.g1.refresh(this.model.get('memfree'));
+            this.g2.refresh(this.model.get('cpuload'));
+            this.g3.refresh(this.model.get('dbconn'));
         }
 
     });
