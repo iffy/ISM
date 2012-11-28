@@ -46,6 +46,9 @@ define([
                 chart: {
                     renderTo: this.$('.placeholder')[0],
                 },
+                credits: {
+                    enabled: false
+                },
                 title: {
                     text: null
                 },

@@ -28,21 +28,28 @@ define([
 
         drawGraphs: function() {
             // This should only be called once after render
+            var maxram = 32000000
+            if (this.model.get('id') == 'web0') {
+                maxram = 16000000000
+            }
             this.g1 = new JustGage({
                 id: this.model.get('id') + '_ram',
                 value:0,
                 min:0,
-                max:100,
+                max:maxram,
                 title: "Ram",
-                humanFriendly: true
+                titleFontColor:'#4572A7',
+                humanFriendly: true,
+                humanFriendlyDecimal: 1
             });
             
             this.g2 = new JustGage({
                 id:this.model.get('id') + '_cpu',
                 value:0,
                 min:0,
-                max:100,
-                title: "CPU Load"
+                max:4,
+                title: "CPU Load",
+                titleFontColor:'#AA4643'
             });
             
             this.g3 = new JustGage({
@@ -50,16 +57,46 @@ define([
                 value:0,
                 min:0,
                 max:200,
-                title: "Connections"
+                title: "Connections",
+                titleFontColor:'#89A54E'
             }); 
 
-            this.chart = new Highcharts.Chart({
+            this.dbconns = this.drawMiniLine('dbconn', 'Connections', '#89A54E');
+            this.cpuload = this.drawMiniLine('cpuload', 'CPU Load', '#AA4643');
+            this.memused = this.drawMiniLine('memused', 'Ram', '#4572A7');
+
+        },
+
+        refreshGraphs: function(d) {
+            
+            // GUAGES
+            this.g1.refresh(this.model.get('memused') * 1000);
+            this.g2.refresh(this.model.get('cpuload'));
+            this.g3.refresh(this.model.get('dbconn'));
+           
+            // CHARTS
+            var db = this.dbconns.get('dbconn');
+            db.addPoint(this.model.get('dbconn'));
+
+            var mem = this.memused.get('memused');
+            mem.addPoint(this.model.get('memused'));
+
+            var cpu = this.cpuload.get('cpuload');
+            cpu.addPoint(this.model.get('cpuload'));
+        },
+
+        drawMiniLine: function(id, name, color) {
+        
+            var chart = new Highcharts.Chart({
                 chart: {
-                    renderTo:this.$('#' + this.model.get('id') + '_minigraph')[0],
+                    renderTo:this.$('#' + this.model.get('id') + '_' + id)[0],
                     type:'line',
-                    width:300,
-                    height:100,
-                    backgroundColor:null
+                    height:65,
+                    backgroundColor:null,
+                },
+                colors: [color],
+                credits: {
+                    enabled: false
                 },
                 title: {
                     text: null
@@ -86,7 +123,7 @@ define([
                 },
 
                 legend: {
-                    enabled: true,
+                    enabled: false,
                     borderColor:'transparent'
                 },
 
@@ -102,43 +139,15 @@ define([
                         }
                     }
                 },
-
                 series: [
                     {
-                        id:'memfree',
-                        name:'Ram',
+                        id:id,
+                        name:name,
                         data:[]
                     },
-                    {
-                        id:'cpuload',
-                        name:'CPU',
-                        data:[]
-                    },
-                    {
-                        id:'dbconn',
-                        name:'DB',
-                        data:[]
-                    }
                 ]
             });
-        },
-
-        refreshGraphs: function(d) {
-            
-            // GUAGES
-            this.g1.refresh(this.model.get('memfree'));
-            this.g2.refresh(this.model.get('cpuload'));
-            this.g3.refresh(this.model.get('dbconn'));
-           
-            // CHARTS
-            var db = this.chart.get('dbconn');
-            db.addPoint(this.model.get('dbconn'));
-
-            var mem = this.chart.get('memfree');
-            mem.addPoint(this.model.get('memfree'));
-
-            var cpu = this.chart.get('cpuload');
-            cpu.addPoint(this.model.get('cpuload'));
+            return chart;
         }
 
     });
