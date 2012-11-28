@@ -1,36 +1,55 @@
 define([
     'backbone',
     'underscore',
-    'collections/menu',
-    'collections/minis',
+    'collections/servers',
     'views/menu-container',
     'views/mini-collection',
     'views/latency'
-], function(Backbone, _, MenuCollection, MiniCollection, MenuView, MiniCollectionView, LatencyView) {
+], function(Backbone, _, ServerCollection, MenuView, MiniCollectionView, LatencyView) {
     // MAIN VIEW
     return Backbone.View.extend({
 
+        el:'#ism-container',
+
         initialize: function() {
 
+            // THE SERVERS WE ARE GOING TO SHOW DATA ABOUT
+            this.ServerCollection = new ServerCollection();
+            this.ServerCollection.fetch();  
 
             // CREATE THE MENU VIEW
-            this.MenuCollection = new MenuCollection();
             this.MenuView = new MenuView({
-                'collection':this.MenuCollection
+                'collection':this.ServerCollection
             });
-
-            // MINI APPS ON THE DASHBOARD
-            this.MiniCollection = new MiniCollection();
-            this.MiniCollectionView = new MiniCollectionView({
-                'collection':this.MiniCollection
-            });
-
-            // LATENCY
-            this.LatencyView = new LatencyView();
-            $('#main-container').append(this.LatencyView.render().el);
-            this.LatencyView.getGraphData();
-
         },
+
+        showSection: function(section) {
+            console.log(section);
+
+            // DASHBOARD VIEW
+            if (!section || section == '') {
+                section = 'dashboard'
+                
+
+                this.MiniCollectionView = new MiniCollectionView({
+                    'collection':this.ServerCollection
+                });
+
+                // LATENCY
+                this.LatencyView = new LatencyView();
+                $('#main-container').append(this.LatencyView.render().el);
+                this.LatencyView.getGraphData();
+
+            } else {
+            // SERVER VIEW
+
+                //REMOVE DASHBOARD STUFF
+                this.LatencyView ? this.LatencyView.remove() : false;
+                this.MiniCollectionView ? this.MiniCollectionView.remove() : false;
+            }
+
+            this.MenuView.trigger('tab:select', section);
+        }
 
     });
 });

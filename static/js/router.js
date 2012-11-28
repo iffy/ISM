@@ -10,20 +10,22 @@ define([
         },
 
         index: function() {
+            console.log('index');
 
             if (!window.ism) {
                 window.ism = new MainView();
-
-                window.ism.MenuCollection.fetch();
-                window.ism.MiniCollection.fetch(); 
             }
+
+            window.ism.showSection();
 
         },
 
         server: function(s) {
-            console.log('server');
-            console.log(s);
-            
+            // SELECT A SERVER TO VIEW DATA ABOUT
+            if (!window.ism) {
+                window.ism = new MainView();
+            }
+            window.ism.showSection(s); 
         }
     });
 });

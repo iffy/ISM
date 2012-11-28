@@ -14,7 +14,10 @@ define([
         },
 
         handleSockData: function(d) {
-           this.set(JSON.parse(d['data'])[0]);
+            var data = JSON.parse(d['data']);
+            if (data[0]) {
+               this.set(data[0]); 
+            }
         },
 
     });

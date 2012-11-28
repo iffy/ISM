@@ -12,10 +12,6 @@ define([
 
         template:_.template(MenuTemplate),
 
-        events: {
-            'click .menu-item':'selectTab'
-        },
-
         initialize: function() {
             //
         },
@@ -25,11 +21,6 @@ define([
             return this;
         },
 
-        selectTab: function() {
-            // tab:select removes the active class from all of the containers li's
-            this.options.container.trigger('tab:select');
-            $(this.el).addClass('active');
-        }
     });
 });
 

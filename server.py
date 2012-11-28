@@ -202,6 +202,7 @@ root.putChild('templates', template_resource)
 #stuff
 root.putChild("menu", MenuItems())
 root.putChild("minis", MiniWrap())
+root.putChild("servers", MiniWrap())
 root.putChild("latency", Latency())
 
 factory = Site(root)

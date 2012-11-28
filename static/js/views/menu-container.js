@@ -20,9 +20,13 @@ define([
             }, this);
         },
 
-        tabSelect: function() {
+        tabSelect: function(tab) {
+            // tab - tab view selected
             // When ever a tab is selected, remove the active class
             this.$('.active').removeClass('active');
+
+            window.ism.MenuView.$('.' + tab).parent().addClass('active');
+            return false;
         }
     });
 });
